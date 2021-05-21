@@ -5,15 +5,15 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="generator" content="Crystal Docs 0.36.1">
 <meta name="crystal_docs.project_version" content="0.1.0">
-<meta name="crystal_docs.project_name" content="fast-jsonapi-serializer-cr">
+<meta name="crystal_docs.project_name" content="fast-jsonapi-serializer">
 
 
 
 <link href="css/style.css" rel="stylesheet" type="text/css" />
 <script type="text/javascript" src="js/doc.js"></script>
 
-  <meta name="repository-name" content="fast-jsonapi-serializer-cr">
-  <title>fast-jsonapi-serializer-cr 0.1.0</title>
+  <meta name="repository-name" content="fast-jsonapi-serializer">
+  <title>fast-jsonapi-serializer 0.1.0</title>
   <script type="text/javascript">
   CrystalDocs.base_path = "";
   </script>
@@ -34,7 +34,7 @@
     <div class="project-summary">
       <h1 class="project-name">
         <a href="index.html">
-          fast-jsonapi-serializer-cr
+          fast-jsonapi-serializer
         </a>
       </h1>
 
@@ -51,22 +51,27 @@
   <div class="types-list">
     <ul>
   
-  <li class="parent " data-id="fast-jsonapi-serializer-cr/FastJSONAPISerializer" data-name="fastjsonapiserializer">
+  <li class="parent " data-id="fast-jsonapi-serializer/FastJSONAPISerializer" data-name="fastjsonapiserializer">
       <a href="FastJSONAPISerializer.html">FastJSONAPISerializer</a>
       
         <ul>
   
-  <li class=" " data-id="fast-jsonapi-serializer-cr/FastJSONAPISerializer/Base" data-name="fastjsonapiserializer::base(t)">
+  <li class=" " data-id="fast-jsonapi-serializer/FastJSONAPISerializer/Base" data-name="fastjsonapiserializer::base(t)">
       <a href="FastJSONAPISerializer/Base.html">Base</a>
       
     </li>
   
-  <li class=" " data-id="fast-jsonapi-serializer-cr/FastJSONAPISerializer/DSL" data-name="fastjsonapiserializer::dsl">
+  <li class=" " data-id="fast-jsonapi-serializer/FastJSONAPISerializer/DSL" data-name="fastjsonapiserializer::dsl">
       <a href="FastJSONAPISerializer/DSL.html">DSL</a>
       
     </li>
   
-  <li class=" " data-id="fast-jsonapi-serializer-cr/FastJSONAPISerializer/MetaAny" data-name="fastjsonapiserializer::metaany">
+  <li class=" " data-id="fast-jsonapi-serializer/FastJSONAPISerializer/IDAny" data-name="fastjsonapiserializer::idany">
+      <a href="FastJSONAPISerializer/IDAny.html">IDAny</a>
+      
+    </li>
+  
+  <li class=" " data-id="fast-jsonapi-serializer/FastJSONAPISerializer/MetaAny" data-name="fastjsonapiserializer::metaany">
       <a href="FastJSONAPISerializer/MetaAny.html">MetaAny</a>
       
     </li>
@@ -89,11 +94,11 @@
   </svg>
 </a>FastJSONAPISerializer</h1>
 
-<p><img src="https://github.com/mjeffrey18/fast-jsonapi-serializer-cr/actions/workflows/ci/badge.svg?branch=main" alt="Build Status"/> <a href="https://mjeffrey18.github.io/fast-jsonapi-serializer-cr/"><img src="https://img.shields.io/badge/docs-available-brightgreen.svg" alt="Docs"/></a> <a href="https://github.com/mjeffrey18/fast-jsonapi-serializer-cr/releases"><img src="https://img.shields.io/github/release/mjeffrey18/fast-jsonapi-serializer-cr.svg" alt="GitHub release"/></a></p>
+<p><img src="https://github.com/mjeffrey18/fast-jsonapi-serializer/actions/workflows/ci.yml/badge.svg?branch=main" alt="Build Status"/> <a href="https://mjeffrey18.github.io/fast-jsonapi-serializer/"><img src="https://img.shields.io/badge/docs-available-brightgreen.svg" alt="Docs"/></a> <a href="https://github.com/mjeffrey18/fast-jsonapi-serializer/releases"><img src="https://img.shields.io/github/release/mjeffrey18/fast-jsonapi-serializer.svg" alt="GitHub release"/></a></p>
 
 <p>Fast JSON-API Serializer is a fast, flexible and simple <a href="https://jsonapi.org">JSON-API</a> serializer for crystal.</p>
 
-<p>Refer to the full API <a href="https://mjeffrey18.github.io/fast-jsonapi-serializer-cr/">documentation</a></p>
+<p>Refer to the full API <a href="https://mjeffrey18.github.io/fast-jsonapi-serializer/">documentation</a></p>
 
 <h2><a id="why-use-it" class="anchor" href="#why-use-it">
   <svg class="octicon-link" aria-hidden="true">
@@ -134,8 +139,8 @@
 <ol><li>Add the dependency to your <code>shard.yml</code>:</li></ol>
 
 <pre><code class="language-yaml">dependencies:
-  fast-jsonapi-serializer-cr:
-    github: mjeffrey18/fast-jsonapi-serializer-cr</code></pre>
+  fast-jsonapi-serializer:
+    github: mjeffrey18/fast-jsonapi-serializer</code></pre>
 
 <ol><li>Run <code>shards install</code></li></ol>
 
@@ -147,7 +152,7 @@
 
 <p>Require the shard in your project.</p>
 
-<pre><code class="language-crystal"><span class="k">require</span> <span class="s">&quot;fast-jsonapi-serializer-cr&quot;</span></code></pre>
+<pre><code class="language-crystal"><span class="k">require</span> <span class="s">&quot;fast-jsonapi-serializer&quot;</span></code></pre>
 
 <h2><a id="usage" class="anchor" href="#usage">
   <svg class="octicon-link" aria-hidden="true">
@@ -752,7 +757,7 @@ resource.rooms <span class="o">=</span> [room]
   </svg>
 </a>Contributing</h2>
 
-<ol><li>Fork it (&lt;https://github.com/mjeffrey18/fast-jsonapi-serializer-cr/fork>)</li><li>Create your feature branch (<code>git checkout -b my-new-feature</code>)</li><li>Commit your changes (<code>git commit -am 'Add some feature'</code>)</li><li>Push to the branch (<code>git push origin my-new-feature</code>)</li><li>Create a new Pull Request</li></ol>
+<ol><li>Fork it (&lt;https://github.com/mjeffrey18/fast-jsonapi-serializer/fork>)</li><li>Create your feature branch (<code>git checkout -b my-new-feature</code>)</li><li>Commit your changes (<code>git commit -am 'Add some feature'</code>)</li><li>Push to the branch (<code>git push origin my-new-feature</code>)</li><li>Create a new Pull Request</li></ol>
 
 <h2><a id="acknowledgements" class="anchor" href="#acknowledgements">
   <svg class="octicon-link" aria-hidden="true">
