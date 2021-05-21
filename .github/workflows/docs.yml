@@ -8,15 +8,18 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     container:
-      image: crystallang/crystal
+      image: crystallang/crystal:1.0.0
     steps:
       - uses: actions/checkout@v2
         with:
           persist-credentials: false
-      - name: "Install shards"
-        run: shards install
+
+      - name: Install shards
+        run: shards check --production || shards install --production
+
       - name: "Generate docs"
         run: crystal docs
+
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
         with:

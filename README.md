@@ -394,7 +394,7 @@ end
 
 Make sure to use the `serialize(includes: ...)` API to include the relations:
 
-```
+```crystal
 # build all associations
 resource = Restaurant.new
 resource.address = Address.new
@@ -644,7 +644,7 @@ RestaurantSerializer.new(resource).serialize(
 
 You can DRY your serializers with inheritance - just add required attributes and/or associations in the subclasses.
 
-```
+```crystal
 class UserSerializer < Serializer::Base(User)
   attributes :name, :age
 end
