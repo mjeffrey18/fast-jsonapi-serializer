@@ -24,7 +24,7 @@ jobs:
     - uses: actions/checkout@v2
 
     - name: Install shards
-      run: shards check || shards install
+      run: shards check --production || shards install --production
 
     - name: Run tests
       run: crystal spec
