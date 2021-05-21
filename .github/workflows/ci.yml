@@ -2,7 +2,7 @@ name: fast-jsonapi-serializer CI
 
 on:
   push:
-    branches: "*"
+    branches: [ main ]
   pull_request:
     branches: "*"
 
