@@ -1,0 +1,782 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="generator" content="Crystal Docs 0.36.1">
+<meta name="crystal_docs.project_version" content="0.1.0">
+<meta name="crystal_docs.project_name" content="fast-jsonapi-serializer-cr">
+
+
+
+<link href="css/style.css" rel="stylesheet" type="text/css" />
+<script type="text/javascript" src="js/doc.js"></script>
+
+  <meta name="repository-name" content="fast-jsonapi-serializer-cr">
+  <title>fast-jsonapi-serializer-cr 0.1.0</title>
+  <script type="text/javascript">
+  CrystalDocs.base_path = "";
+  </script>
+</head>
+<body>
+
+<svg class="hidden">
+  <symbol id="octicon-link" viewBox="0 0 16 16">
+    <path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path>
+  </symbol>
+</svg>
+<div class="sidebar">
+  <div class="sidebar-header">
+    <div class="search-box">
+      <input type="search" class="search-input" placeholder="Search..." spellcheck="false" aria-label="Search">
+    </div>
+
+    <div class="project-summary">
+      <h1 class="project-name">
+        <a href="index.html">
+          fast-jsonapi-serializer-cr
+        </a>
+      </h1>
+
+      <span class="project-version">
+        0.1.0
+      </span>
+    </div>
+  </div>
+
+  <div class="search-results hidden">
+    <ul class="search-list"></ul>
+  </div>
+
+  <div class="types-list">
+    <ul>
+  
+  <li class="parent " data-id="fast-jsonapi-serializer-cr/FastJSONAPISerializer" data-name="fastjsonapiserializer">
+      <a href="FastJSONAPISerializer.html">FastJSONAPISerializer</a>
+      
+        <ul>
+  
+  <li class=" " data-id="fast-jsonapi-serializer-cr/FastJSONAPISerializer/Base" data-name="fastjsonapiserializer::base(t)">
+      <a href="FastJSONAPISerializer/Base.html">Base</a>
+      
+    </li>
+  
+  <li class=" " data-id="fast-jsonapi-serializer-cr/FastJSONAPISerializer/DSL" data-name="fastjsonapiserializer::dsl">
+      <a href="FastJSONAPISerializer/DSL.html">DSL</a>
+      
+    </li>
+  
+  <li class=" " data-id="fast-jsonapi-serializer-cr/FastJSONAPISerializer/MetaAny" data-name="fastjsonapiserializer::metaany">
+      <a href="FastJSONAPISerializer/MetaAny.html">MetaAny</a>
+      
+    </li>
+  
+</ul>
+
+      
+    </li>
+  
+</ul>
+
+  </div>
+</div>
+
+
+<div class="main-content">
+<h1><a id="fast-jsonapi-serializer" class="anchor" href="#fast-jsonapi-serializer">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>FastJSONAPISerializer</h1>
+
+<p><img src="https://github.com/mjeffrey18/fast-jsonapi-serializer-cr/actions/workflows/ci/badge.svg?branch=main" alt="Build Status"/> <a href="https://mjeffrey18.github.io/fast-jsonapi-serializer-cr/"><img src="https://img.shields.io/badge/docs-available-brightgreen.svg" alt="Docs"/></a> <a href="https://github.com/mjeffrey18/fast-jsonapi-serializer-cr/releases"><img src="https://img.shields.io/github/release/mjeffrey18/fast-jsonapi-serializer-cr.svg" alt="GitHub release"/></a></p>
+
+<p>Fast JSON-API Serializer is a fast, flexible and simple <a href="https://jsonapi.org">JSON-API</a> serializer for crystal.</p>
+
+<p>Refer to the full API <a href="https://mjeffrey18.github.io/fast-jsonapi-serializer-cr/">documentation</a></p>
+
+<h2><a id="why-use-it" class="anchor" href="#why-use-it">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>Why use it? 😅</h2>
+
+<ul><li>Works with any ORM or plain Crystal objects.</li><li>Offers a very flexible API.</li><li>Did I mention it was fast?</li></ul>
+
+<h2><a id="benchmarks" class="anchor" href="#benchmarks">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>Benchmarks 🚀</h2>
+
+<blockquote><strong>Spoiler</strong> <strong>~200%</strong> faster!</blockquote>
+
+<p><em>Compared to other JSON-API compliant alternatives. Sure, benchmarks are to be taken with a grain of salt...</em></p>
+
+<p>See <code>examples/benchmark.cr</code> for the full benchmark setup.</p>
+
+<p>(Kitchen Sink) With various relationships and all API features used -</p>
+
+<pre><code class="language-crystal"><span class="t">FastJSONAPISerializer</span>  <span class="n">66.54</span>k ( <span class="n">15.03</span>µs) (± <span class="n">2.25</span><span class="o">%</span>)  <span class="n">22.2</span>kB<span class="s">/op        fastest
+    JSONApiSerializer  34.32k ( 29.14µs) (± 2.49%)  33.0kB/</span>op   <span class="n">1.94</span>× slower</code></pre>
+
+<p>Single object with 1 attribute</p>
+
+<pre><code class="language-crystal"><span class="t">FastJSONAPISerializer</span> <span class="n">881.46</span>k (  <span class="n">1.13</span>µs) (± <span class="n">1.98</span><span class="o">%</span>)  <span class="n">1.47</span>kB<span class="s">/op        fastest
+    JSONApiSerializer 669.06k (  1.49µs) (± 2.65%)  1.44kB/</span>op   <span class="n">1.32</span>× slower</code></pre>
+
+<h2><a id="installation" class="anchor" href="#installation">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>Installation</h2>
+
+<ol><li>Add the dependency to your <code>shard.yml</code>:</li></ol>
+
+<pre><code class="language-yaml">dependencies:
+  fast-jsonapi-serializer-cr:
+    github: mjeffrey18/fast-jsonapi-serializer-cr</code></pre>
+
+<ol><li>Run <code>shards install</code></li></ol>
+
+<h2><a id="setup" class="anchor" href="#setup">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>Setup</h2>
+
+<p>Require the shard in your project.</p>
+
+<pre><code class="language-crystal"><span class="k">require</span> <span class="s">&quot;fast-jsonapi-serializer-cr&quot;</span></code></pre>
+
+<h2><a id="usage" class="anchor" href="#usage">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>Usage</h2>
+
+<h3><a id="quick-introduction" class="anchor" href="#quick-introduction">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>Quick Introduction</h3>
+
+<p>Considering a model/resource (ORM or plain crystal class)</p>
+
+<pre><code class="language-crystal"><span class="k">class</span> <span class="t">Restaurant</span>
+  property name
+
+  <span class="k">def</span> <span class="m">initialize</span>(@name <span class="o">=</span> <span class="s">&quot;big burgers&quot;</span>)
+  <span class="k">end</span>
+<span class="k">end</span></code></pre>
+
+<p>Create a serializer which inherits from <code><a href="FastJSONAPISerializer/Base.html">FastJSONAPISerializer::Base</a>(YourResourceClass)</code></p>
+
+<pre><code class="language-crystal"><span class="k">class</span> <span class="t">RestaurantSerializer</span> <span class="o">&lt;</span> <span class="t">FastJSONAPISerializer</span><span class="t">::</span><span class="t">Base</span>(<span class="t">Restaurant</span>)
+  attribute <span class="n">:name</span>
+<span class="k">end</span></code></pre>
+
+<p>Use the <code>serialize</code> API to to build a <code>JSON-API</code> compatible string</p>
+
+<h4><a id="single-resource" class="anchor" href="#single-resource">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>Single Resource</h4>
+
+<pre><code class="language-crystal">resource <span class="o">=</span> <span class="t">Restaurant</span>.<span class="k">new</span>
+<span class="t">RestaurantSerializer</span>.<span class="k">new</span>(resource).serialize</code></pre>
+
+<p>Example above produces this output (made readable for docs):</p>
+
+<pre><code class="language-json">{
+  "data": {
+    "id": "1",
+    "type": "restaurant",
+    "attributes": {
+      "name": "big burgers"
+    }
+  }
+}</code></pre>
+
+<h4><a id="resource-collection" class="anchor" href="#resource-collection">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>Resource Collection</h4>
+
+<pre><code class="language-crystal">resources <span class="o">=</span> [<span class="t">Restaurant</span>.<span class="k">new</span>, <span class="t">Restaurant</span>.<span class="k">new</span>]
+<span class="t">RestaurantSerializer</span>.<span class="k">new</span>(resources).serialize
+</code></pre>
+
+<p>Example above produces this output (made readable for docs):</p>
+
+<pre><code class="language-json">{
+  "data": [
+    {
+      "id": "1",
+      "type": "restaurant",
+      "attributes": {
+        "name": "big burgers"
+      }
+    },
+    {
+      "id": "2",
+      "type": "restaurant",
+      "attributes": {
+        "name": "big sandwiches"
+      }
+    }
+  ]
+}</code></pre>
+
+<h3><a id="type" class="anchor" href="#type">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>Type</h3>
+
+<p>By default, the JSON-API type key will be the <em>snake_case</em> name of the resource class i.e. <code>AdminUser -> "admin_user"</code>.
+You can override this behaviour by setting the <code>type(String)</code> macro.</p>
+
+<pre><code class="language-crystal"><span class="k">class</span> <span class="t">AdminUserSerializer</span> <span class="o">&lt;</span> <span class="t">FastJSONAPISerializer</span><span class="t">::</span><span class="t">Base</span>(<span class="t">AdminUser</span>)
+  <span class="k">type</span> <span class="s">&quot;user&quot;</span>
+  attribute <span class="n">:name</span>
+<span class="k">end</span></code></pre>
+
+<p>Example above produces this output (made readable for docs):</p>
+
+<pre><code class="language-json">{
+  "data": {
+    "id": "1",
+    "type": "user",
+    "attributes": {
+      "name": "Joe"
+    }
+  }
+}</code></pre>
+
+<h3><a id="id" class="anchor" href="#id">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>ID</h3>
+
+<p>Your resource class should have an id instance method or getter to populate the JSON <code>id</code> field of the resource.</p>
+
+<h4><a id="supported-ids" class="anchor" href="#supported-ids">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>Supported ID's</h4>
+
+<ul><li>Integer</li><li>String</li><li>UUID</li><li>Nil</li></ul>
+
+<p>If the resource does not respond to <code>id</code> the JSON <code>id</code> value will become <code>null</code> - giving a little more flexibility, although not advised or complaint with the <code>JSON-API</code> standard.</p>
+
+<blockquote>IMPORTANT - As per the <a href="https://jsonapi.org">JSON-API</a> standard, we always convert the id to a string.</blockquote>
+
+<p>Example without and id below;</p>
+
+<pre><code class="language-crystal"><span class="k">class</span> <span class="t">Restaurant</span>
+  property name
+
+  <span class="k">def</span> <span class="m">initialize</span>(@name <span class="o">=</span> <span class="s">&quot;big burgers&quot;</span>)
+  <span class="k">end</span>
+<span class="k">end</span>
+
+<span class="k">class</span> <span class="t">RestaurantSerializer</span> <span class="o">&lt;</span> <span class="t">FastJSONAPISerializer</span><span class="t">::</span><span class="t">Base</span>(<span class="t">Restaurant</span>)
+  attribute <span class="n">:name</span>
+<span class="k">end</span>
+
+<span class="t">RestaurantSerializer</span>.<span class="k">new</span>(<span class="t">Restaurant</span>.<span class="k">new</span>).serialize</code></pre>
+
+<p>Example above produces this output (made readable for docs):</p>
+
+<pre><code class="language-json">{
+  "data": {
+    "id": null,
+    "type": "restaurant",
+    "attributes": {
+      "name": "big burgers"
+    }
+  }
+}</code></pre>
+
+<h3><a id="attributes" class="anchor" href="#attributes">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>Attributes</h3>
+
+<p>The attributes API is very flexible.</p>
+
+<p><strong>Single</strong> <code>attribute</code></p>
+
+<pre><code class="language-crystal"><span class="k">class</span> <span class="t">RestaurantSerializer</span> <span class="o">&lt;</span> <span class="t">FastJSONAPISerializer</span><span class="t">::</span><span class="t">Base</span>(<span class="t">Restaurant</span>)
+  attribute <span class="n">:name</span>
+  attribute <span class="n">:street</span>
+<span class="k">end</span></code></pre>
+
+<p><strong>Multiple</strong> <code>attributes</code></p>
+
+<pre><code class="language-crystal"><span class="k">class</span> <span class="t">RestaurantSerializer</span> <span class="o">&lt;</span> <span class="t">FastJSONAPISerializer</span><span class="t">::</span><span class="t">Base</span>(<span class="t">Restaurant</span>)
+  attributes <span class="n">:name</span>, <span class="n">:street</span>
+<span class="k">end</span></code></pre>
+
+<p><strong>Mixed</strong></p>
+
+<pre><code class="language-crystal"><span class="k">class</span> <span class="t">RestaurantSerializer</span> <span class="o">&lt;</span> <span class="t">FastJSONAPISerializer</span><span class="t">::</span><span class="t">Base</span>(<span class="t">Restaurant</span>)
+  attributes <span class="n">:name</span>, <span class="n">:street</span>
+  attribute <span class="n">:post_code</span>
+<span class="k">end</span></code></pre>
+
+<p><strong>Serializer methods</strong></p>
+
+<p>You can also list <code>attributes</code> which are on the serializer class;</p>
+
+<pre><code class="language-crystal"><span class="k">class</span> <span class="t">RestaurantSerializer</span> <span class="o">&lt;</span> <span class="t">FastJSONAPISerializer</span><span class="t">::</span><span class="t">Base</span>(<span class="t">Restaurant</span>)
+  attribute <span class="n">:name</span>
+  attribute <span class="n">:custom_method_on_serializer</span>
+
+  <span class="k">def</span> <span class="m">custom_method_on_serializer</span>
+    <span class="n">123</span>
+  <span class="k">end</span>
+<span class="k">end</span></code></pre>
+
+<h4><a id="control-the-attribute-json-key-name" class="anchor" href="#control-the-attribute-json-key-name">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>Control the attribute JSON key name</h4>
+
+<p>Let's say you want to have different key name or case, you can pass this as a second argument <code>attribute</code></p>
+
+<pre><code class="language-crystal"><span class="k">class</span> <span class="t">RestaurantSerializer</span> <span class="o">&lt;</span> <span class="t">FastJSONAPISerializer</span><span class="t">::</span><span class="t">Base</span>(<span class="t">Restaurant</span>)
+  attribute <span class="n">:name</span>, <span class="n">:FullName</span>
+<span class="k">end</span></code></pre>
+
+<p>Example above produces this output (made readable for docs):</p>
+
+<pre><code class="language-json">{
+  "data": {
+    "id": "1",
+    "type": "restaurant",
+    "attributes": {
+      "FullName": "big burgers"
+    }
+  }
+}</code></pre>
+
+<h4><a id="conditional-control-of-the-attributes" class="anchor" href="#conditional-control-of-the-attributes">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>Conditional control of the attributes</h4>
+
+<p><strong>Attribute API</strong></p>
+
+<pre><code class="language-crystal"><span class="k">class</span> <span class="t">RestaurantSerializer</span> <span class="o">&lt;</span> <span class="t">FastJSONAPISerializer</span><span class="t">::</span><span class="t">Base</span>(<span class="t">Restaurant</span>)
+  attribute <span class="n">:name</span>, <span class="n">:FullName</span>, <span class="k">if</span>: <span class="n">:should_show_name</span>
+
+  <span class="k">def</span> <span class="m">should_show_name</span>(object, _options)
+    object.has_full_name?
+  <span class="k">end</span>
+<span class="k">end</span>
+
+<span class="t">RestaurantSerializer</span>.<span class="k">new</span>(<span class="t">Restaurant</span>.<span class="k">new</span>).serialize</code></pre>
+
+<p>OR</p>
+
+<p>Use the <code>serialize(options: ...)</code> API to control the attributes</p>
+
+<pre><code class="language-crystal"><span class="k">class</span> <span class="t">RestaurantSerializer</span> <span class="o">&lt;</span> <span class="t">FastJSONAPISerializer</span><span class="t">::</span><span class="t">Base</span>(<span class="t">Restaurant</span>)
+  attribute <span class="n">:name</span>, <span class="n">:FullName</span>, <span class="k">if</span>: <span class="n">:should_show_name</span>
+
+  <span class="k">def</span> <span class="m">should_show_name</span>(object, options)
+    object.has_full_name? && options[<span class="n">:allow_name</span>]
+  <span class="k">end</span>
+<span class="k">end</span>
+
+<span class="t">RestaurantSerializer</span>.<span class="k">new</span>(<span class="t">Restaurant</span>.<span class="k">new</span>).serialize(
+  options: {<span class="n">:allow_name</span> => <span class="n">true</span>}
+)</code></pre>
+
+<p><strong>Serialize API</strong></p>
+
+<p>We can have any number of attributes which can be excluded on demand.</p>
+
+<p>Use the <code>serialize(except: ...)</code> API to control the attributes</p>
+
+<pre><code class="language-crystal"><span class="k">class</span> <span class="t">RestaurantSerializer</span> <span class="o">&lt;</span> <span class="t">FastJSONAPISerializer</span><span class="t">::</span><span class="t">Base</span>(<span class="t">Restaurant</span>)
+  attribute <span class="n">:name</span>, <span class="n">:address</span>, <span class="n">:post_code</span>
+<span class="k">end</span>
+
+<span class="t">RestaurantSerializer</span>.<span class="k">new</span>(<span class="t">Restaurant</span>.<span class="k">new</span>).serialize(
+  except: <span class="s">%i(name postcode)</span>
+)</code></pre>
+
+<p>Example above produces this output (made readable for docs):</p>
+
+<pre><code class="language-json">{
+  "data": {
+    "id": "1",
+    "type": "restaurant",
+    "attributes": {
+      "address": "somewhere cool"
+    }
+  }
+}</code></pre>
+
+<h3><a id="relations" class="anchor" href="#relations">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>Relations</h3>
+
+<p>The following relationships are supported:</p>
+
+<ul><li><code>belongs_to</code></li><li><code>has_many</code></li><li><code>has_one</code></li></ul>
+
+<p>Given a model which has various associations like follows:</p>
+
+<pre><code class="language-crystal"><span class="k">class</span> <span class="t">Restaurant</span>
+  property id : <span class="t">String</span>,
+    name : <span class="t">String</span>,
+    address : <span class="t">Nil</span> <span class="o">|</span> <span class="t">Address</span> <span class="o">=</span> <span class="n">nil</span>,
+    post_code : <span class="t">Nil</span> <span class="o">|</span> <span class="t">PostCode</span> <span class="o">=</span> <span class="n">nil</span>,
+    rooms : <span class="t">Array</span>(<span class="t">Room</span>) <span class="o">=</span> <span class="o">[]</span> <span class="k">of</span> <span class="t">Room</span>
+
+  <span class="k">def</span> <span class="m">initialize</span>(@id, @name <span class="o">=</span> <span class="s">&quot;big burgers&quot;</span>)
+  <span class="k">end</span>
+
+  <span class="k">def</span> <span class="m">tables</span>
+    [<span class="t">Table</span>.<span class="k">new</span>(<span class="n">1</span>), <span class="t">Table</span>.<span class="k">new</span>(<span class="n">2</span>), <span class="t">Table</span>.<span class="k">new</span>(<span class="n">3</span>)]
+  <span class="k">end</span>
+<span class="k">end</span></code></pre>
+
+<p>You can define the serializer relationships</p>
+
+<pre><code class="language-crystal"><span class="k">class</span> <span class="t">RestaurantSerializer</span> <span class="o">&lt;</span> <span class="t">FastJSONAPISerializer</span><span class="t">::</span><span class="t">Base</span>(<span class="t">Restaurant</span>)
+  attribute <span class="n">:name</span>
+
+  belongs_to <span class="n">:address</span>, <span class="t">AddressSerializer</span>
+
+  has_one <span class="n">:post_code</span>, <span class="t">PostCodeSerializer</span>
+
+  has_many <span class="n">:rooms</span>, <span class="t">RoomSerializer</span>
+  has_many <span class="n">:tables</span>, <span class="t">TableSerializer</span>, <span class="n">:Tables</span> <span class="c"># here we can override the name (optional)</span>
+<span class="k">end</span>
+
+<span class="c"># Or if you prefer a more explicit approach</span>
+
+<span class="k">class</span> <span class="t">RestaurantSerializer</span> <span class="o">&lt;</span> <span class="t">FastJSONAPISerializer</span><span class="t">::</span><span class="t">Base</span>(<span class="t">Restaurant</span>)
+  attribute <span class="n">:name</span>
+
+  belongs_to <span class="n">:address</span>, serializer: <span class="t">AddressSerializer</span>
+
+  has_one <span class="n">:post_code</span>, serializer: <span class="t">PostCodeSerializer</span>
+
+  has_many <span class="n">:rooms</span>, serializer: <span class="t">RoomSerializer</span>
+  has_many <span class="n">:tables</span>, serializer: <span class="t">TableSerializer</span>, key: <span class="n">:Tables</span>
+<span class="k">end</span></code></pre>
+
+<p>Make sure to use the <code>serialize(includes: ...)</code> API to include the relations:</p>
+
+<pre><code class="language-crystal"><span class="c"># build all associations</span>
+resource <span class="o">=</span> <span class="t">Restaurant</span>.<span class="k">new</span>
+resource.address <span class="o">=</span> <span class="t">Address</span>.<span class="k">new</span>
+resource.post_code <span class="o">=</span> <span class="t">PostCode</span>.<span class="k">new</span>
+room <span class="o">=</span> <span class="t">Room</span>.<span class="k">new</span>(<span class="n">1</span>)
+room.tables <span class="o">=</span> [<span class="t">Table</span>.<span class="k">new</span>(<span class="n">1</span>), <span class="t">Table</span>.<span class="k">new</span>(<span class="n">2</span>)]
+resource.rooms <span class="o">=</span> [room]
+
+<span class="t">RestaurantSerializer</span>.<span class="k">new</span>(resource).serialize(
+  includes: {
+    <span class="n">:address</span>   => [<span class="n">:address</span>],
+    <span class="n">:post_code</span> => [<span class="n">:post_code</span>],
+    <span class="n">:tables</span>    => {<span class="n">:room</span> => [<span class="n">:room</span>]}, <span class="c"># notice nested associations also</span>
+  }
+)</code></pre>
+
+<blockquote><strong>IMPORTANT</strong> - Relationships do nothing unless requested via the <code>serialize(includes: ...)</code> API</blockquote>
+
+<p>Example above produces this output (made readable for docs):</p>
+
+<pre><code class="language-json">{
+  "data": {
+    "id": "1",
+    "type": "restaurant",
+    "attributes": {
+      "name": "big burgers"
+    },
+    "relationships": {
+      "address": {
+        "data": {
+          "id": "101",
+          "type": "address"
+        }
+      },
+      "post_code": {
+        "data": {
+          "id": "101",
+          "type": "post_code"
+        }
+      },
+      "Tables": {
+        "data": [
+          {
+            "id": "1",
+            "type": "table"
+          },
+          {
+            "id": "2",
+            "type": "table"
+          },
+          {
+            "id": "3",
+            "type": "table"
+          }
+        ]
+      }
+    }
+  },
+  "included": [
+    {
+      "id": "101",
+      "type": "address",
+      "attributes": {
+        "street": "some street"
+      }
+    },
+    {
+      "id": "101",
+      "type": "post_code",
+      "attributes": {
+        "code": "code 24"
+      }
+    },
+    {
+      "id": "1",
+      "type": "room",
+      "attributes": {
+        "name": "1-name"
+      },
+      "relationships": {}
+    },
+    {
+      "id": "1",
+      "type": "table",
+      "attributes": {
+        "number": 1
+      },
+      "relationships": {
+        "room": {
+          "data": {
+            "id": "1",
+            "type": "room"
+          }
+        }
+      }
+    },
+    {
+      "id": "2",
+      "type": "room",
+      "attributes": {
+        "name": "2-name"
+      },
+      "relationships": {}
+    },
+    {
+      "id": "2",
+      "type": "table",
+      "attributes": {
+        "number": 2
+      },
+      "relationships": {
+        "room": {
+          "data": {
+            "id": "2",
+            "type": "room"
+          }
+        }
+      }
+    },
+    {
+      "id": "3",
+      "type": "room",
+      "attributes": {
+        "name": "3-name"
+      },
+      "relationships": {}
+    },
+    {
+      "id": "3",
+      "type": "table",
+      "attributes": {
+        "number": 3
+      },
+      "relationships": {
+        "room": {
+          "data": {
+            "id": "3",
+            "type": "room"
+          }
+        }
+      }
+    }
+  ]
+}</code></pre>
+
+<h3><a id="meta" class="anchor" href="#meta">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>Meta</h3>
+
+<p>You can add meta details to the JSON response payload.</p>
+
+<p><strong>Serialize API</strong></p>
+
+<p>Use the <code>serialize(meta: ...)</code> API to control the meta attributes</p>
+
+<pre><code class="language-crystal"><span class="t">RestaurantSerializer</span>.<span class="k">new</span>(<span class="t">Restaurant</span>.<span class="k">new</span>).serialize(
+  meta: {<span class="n">:page</span> => <span class="n">0</span>, <span class="n">:limit</span> => <span class="n">50</span>}
+)</code></pre>
+
+<p>Example above produces this output (made readable for docs):</p>
+
+<pre><code class="language-json">{
+  "data": {
+    "id": "1",
+    "type": "restaurant",
+    "attributes": {
+      "name": "big burgers"
+    }
+  },
+  "meta": {
+    "page": 0,
+    "limit": 50
+  }
+}</code></pre>
+
+<p><strong>.meta class method</strong></p>
+
+<p>You can define default meta attributes as a class method on the serializer.</p>
+
+<p>Using the <code>serialize(meta: ...)</code> API you can <strong>merge</strong> or <strong>override</strong> the default meta attributes</p>
+
+<pre><code class="language-crystal"><span class="k">class</span> <span class="t">RestaurantSerializer</span> <span class="o">&lt;</span> <span class="t">FastJSONAPISerializer</span><span class="t">::</span><span class="t">Base</span>(<span class="t">Restaurant</span>)
+  <span class="k">def</span> <span class="m">self</span>.meta(options)
+    {
+      <span class="n">:status</span> => <span class="s">&quot;ok&quot;</span>
+    } <span class="k">of</span> <span class="t">Symbol</span> => <span class="t">FastJSONAPISerializer</span><span class="t">::</span><span class="t">MetaAny</span>
+  <span class="k">end</span>
+<span class="k">end</span>
+
+<span class="t">RestaurantSerializer</span>.<span class="k">new</span>(<span class="t">Restaurant</span>.<span class="k">new</span>).serialize(
+  meta: {<span class="n">:page</span> => <span class="n">0</span>, <span class="n">:limit</span> => <span class="n">50</span>}
+)</code></pre>
+
+<blockquote>Note - <code><a href="FastJSONAPISerializer/MetaAny.html">FastJSONAPISerializer::MetaAny</a></code> -> (JSON::Any::Type | Int32)</blockquote>
+
+<p>Example above produces this output (made readable for docs):</p>
+
+<pre><code class="language-json">{
+  "data": {
+    "id": "1",
+    "type": "restaurant",
+    "attributes": {
+      "name": "big burgers"
+    }
+  },
+  "meta": {
+    "status": "ok",
+    "page": 0,
+    "limit": 50
+  }
+}</code></pre>
+
+<h3><a id="serialize-api" class="anchor" href="#serialize-api">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>Serialize API</h3>
+
+<p>We covered all the options in the previous examples but this shows all available options.</p>
+
+<ul><li><code>except</code> - array of fields which should be excluded</li><li><code>includes</code> - definition of relation that should be included</li><li><code>options</code> - options that will be passed to methods defined for <code>if</code> attribute options and <code>.meta(options)</code></li><li><code>meta</code> - meta attributes to be added under <code>"meta"</code> key at root level, merged into default <code>.meta</code></li></ul>
+
+<p>Kitchen sink example:</p>
+
+<pre><code class="language-crystal"><span class="t">RestaurantSerializer</span>.<span class="k">new</span>(resource).serialize(
+  except: <span class="s">%i(name)</span>,
+  includes: {
+    <span class="n">:address</span>   => [<span class="n">:address</span>],
+    <span class="n">:post_code</span> => [<span class="n">:post_code</span>],
+    <span class="n">:tables</span>    => {<span class="n">:room</span> => [<span class="n">:room</span>]},
+  },
+  meta: {<span class="n">:page</span> => <span class="n">0</span>, <span class="n">:limit</span> => <span class="n">50</span>},
+  options: {<span class="n">:show_rating</span> => <span class="n">true</span>}
+)</code></pre>
+
+<h3><a id="inheritance" class="anchor" href="#inheritance">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>Inheritance</h3>
+
+<p>You can DRY your serializers with inheritance - just add required attributes and/or associations in the subclasses.</p>
+
+<pre><code class="language-crystal"><span class="k">class</span> <span class="t">UserSerializer</span> <span class="o">&lt;</span> <span class="t">Serializer</span><span class="t">::</span><span class="t">Base</span>(<span class="t">User</span>)
+  attributes <span class="n">:name</span>, <span class="n">:age</span>
+<span class="k">end</span>
+
+<span class="k">class</span> <span class="t">FullUserSerializer</span> <span class="o">&lt;</span> <span class="t">UserSerializer</span>
+  attributes <span class="n">:email</span>, <span class="n">:created_at</span>
+
+  has_many <span class="n">:identities</span>, <span class="t">IdentitySerializer</span>
+<span class="k">end</span></code></pre>
+
+<h2><a id="todo" class="anchor" href="#todo">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>TODO</h2>
+
+<ul><li>Allow Proc based conditional attributes</li><li>Allow Proc based conditional relationships</li><li>Allow global key case-change option</li><li>Allow links meta data</li><li>Add safety checks for inputs and bad data</li></ul>
+
+<h2><a id="contributing" class="anchor" href="#contributing">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>Contributing</h2>
+
+<ol><li>Fork it (&lt;https://github.com/mjeffrey18/fast-jsonapi-serializer-cr/fork>)</li><li>Create your feature branch (<code>git checkout -b my-new-feature</code>)</li><li>Commit your changes (<code>git commit -am 'Add some feature'</code>)</li><li>Push to the branch (<code>git push origin my-new-feature</code>)</li><li>Create a new Pull Request</li></ol>
+
+<h2><a id="acknowledgements" class="anchor" href="#acknowledgements">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>Acknowledgements</h2>
+
+<p>This project was based on concepts gather from another amazing open source shard - <a href="https://github.com/imdrasil/serializer">serializer</a></p>
+
+<p>Thank you so much for the inspiration!</p>
+
+<p>--</p>
+
+<p>I did use this shard as a bench comparison, but with good intentions. Big shout out to <a href="https://github.com/andersondanilo/jsonapi-serializer-cr">jsonapi-serializer-cr</a></p>
+
+<p>This project is awesome and has helped me build projects, great work!</p>
+
+<h2><a id="contributors" class="anchor" href="#contributors">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>Contributors</h2>
+
+<ul><li><a href="https://github.com/mjeffrey18">Marc Jeffrey</a> - creator and maintainer</li></ul>
+</div>
+</body>
+</html>
