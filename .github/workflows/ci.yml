@@ -1,0 +1,30 @@
+name: fast-jsonapi-serializer CI
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: "*"
+
+jobs:
+  check-format:
+    runs-on: ubuntu-latest
+    container:
+      image: crystallang/crystal:1.0.0
+    steps:
+      - uses: actions/checkout@v2
+      - name: Format
+        run: crystal tool format --check
+
+  specs:
+    runs-on: ubuntu-latest
+    container:
+      image: crystallang/crystal:1.0.0
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Install shards
+      run: shards check --production || shards install --production
+
+    - name: Run tests
+      run: crystal spec

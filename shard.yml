@@ -1,4 +1,6 @@
-name: fast-jsonapi-serializer
+name: fast-jsonapi-serializer-cr
+description: |
+  FastJSONAPISerializer is a fast, flexible and simple JSON-API serializer for crystal
 version: 0.1.0
 
 authors:
@@ -7,3 +9,7 @@ authors:
 crystal: 1.0.0
 
 license: MIT
+
+development_dependencies:
+  jsonapi-serializer-cr:
+    github: andersondanilo/jsonapi-serializer-cr

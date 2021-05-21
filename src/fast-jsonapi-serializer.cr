@@ -1,6 +1,6 @@
-# TODO: Write documentation for `Fast::Jsonapi::Serializer`
-module Fast::Jsonapi::Serializer
-  VERSION = "0.1.0"
+require "uuid/json"
+require "./fast-jsonapi-serializer/**"
 
-  # TODO: Put your code here
+module FastJSONAPISerializer
+  VERSION = "0.1.0"
 end
