@@ -3,6 +3,7 @@ require "./dsl"
 module FastJSONAPISerializer
   # Allowed types for *meta* hash values.
   alias MetaAny = JSON::Any::Type | Int32
+  alias IDAny = Int32 | Int64 | UUID | String
 
   # Base serialization superclass.
   #
@@ -483,7 +484,7 @@ module FastJSONAPISerializer
     # Contains unique set of all included serialized relationships
     private getter _included : Set(String)
     # Contains unique set of all serializer keys to ensure we do not add the same included twice
-    private getter _included_keys : Set(Tuple(String, Int32))
+    private getter _included_keys : Set(Tuple(String, IDAny))
 
     # Only use @resource
     #
@@ -492,7 +493,7 @@ module FastJSONAPISerializer
     # ```
     #
     # @_included and @_included_keys are used internally to build child serializers via associations
-    def initialize(@resource : T | Array(T)?, @_included = Set(String).new, @_included_keys = Set(Tuple(String, Int32)).new)
+    def initialize(@resource : T | Array(T)?, @_included = Set(String).new, @_included_keys = Set(Tuple(String, IDAny)).new)
     end
 
     # Generates a JSON formatted string.

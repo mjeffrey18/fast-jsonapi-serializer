@@ -1,4 +1,4 @@
-name: fast-jsonapi-serializer-cr
+name: fast-jsonapi-serializer
 description: |
   FastJSONAPISerializer is a fast, flexible and simple JSON-API serializer for crystal
 version: 0.1.0

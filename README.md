@@ -1,11 +1,11 @@
 # FastJSONAPISerializer
 
-![Build Status](https://github.com/mjeffrey18/fast-jsonapi-serializer-cr/actions/workflows/ci/badge.svg?branch=main) [![Docs](https://img.shields.io/badge/docs-available-brightgreen.svg)](https://mjeffrey18.github.io/fast-jsonapi-serializer-cr/) [![GitHub release](https://img.shields.io/github/release/mjeffrey18/fast-jsonapi-serializer-cr.svg)](https://github.com/mjeffrey18/fast-jsonapi-serializer-cr/releases)
+![Build Status](https://github.com/mjeffrey18/fast-jsonapi-serializer/actions/workflows/ci.yml/badge.svg?branch=main) [![Docs](https://img.shields.io/badge/docs-available-brightgreen.svg)](https://mjeffrey18.github.io/fast-jsonapi-serializer/) [![GitHub release](https://img.shields.io/github/release/mjeffrey18/fast-jsonapi-serializer.svg)](https://github.com/mjeffrey18/fast-jsonapi-serializer/releases)
 
 
 Fast JSON-API Serializer is a fast, flexible and simple [JSON-API](https://jsonapi.org) serializer for crystal.
 
-Refer to the full API [documentation](https://mjeffrey18.github.io/fast-jsonapi-serializer-cr/)
+Refer to the full API [documentation](https://mjeffrey18.github.io/fast-jsonapi-serializer/)
 
 ## Why use it? 😅
 
@@ -41,8 +41,8 @@ FastJSONAPISerializer 881.46k (  1.13µs) (± 1.98%)  1.47kB/op        fastest
 
 ```yaml
 dependencies:
-  fast-jsonapi-serializer-cr:
-    github: mjeffrey18/fast-jsonapi-serializer-cr
+  fast-jsonapi-serializer:
+    github: mjeffrey18/fast-jsonapi-serializer
 ```
 
 2. Run `shards install`
@@ -52,7 +52,7 @@ dependencies:
 Require the shard in your project.
 
 ```crystal
-require "fast-jsonapi-serializer-cr"
+require "fast-jsonapi-serializer"
 ```
 
 ## Usage
@@ -666,7 +666,7 @@ end
 
 ## Contributing
 
-1. Fork it (<https://github.com/mjeffrey18/fast-jsonapi-serializer-cr/fork>)
+1. Fork it (<https://github.com/mjeffrey18/fast-jsonapi-serializer/fork>)
 2. Create your feature branch (`git checkout -b my-new-feature`)
 3. Commit your changes (`git commit -am 'Add some feature'`)
 4. Push to the branch (`git push origin my-new-feature`)
