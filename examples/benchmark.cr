@@ -90,7 +90,7 @@ class RestaurantSerializer < FastJSONAPISerializer::Base(Restaurant)
     options.nil? || !options[:test]?
   end
 
-  def own_field
+  def own_field(object, options)
     12
   end
 

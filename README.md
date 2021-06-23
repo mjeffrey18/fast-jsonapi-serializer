@@ -243,8 +243,16 @@ class RestaurantSerializer < FastJSONAPISerializer::Base(Restaurant)
   attribute :name
   attribute :custom_method_on_serializer
 
-  def custom_method_on_serializer
+  def custom_method_on_serializer(_object, _options)
     123
+  end
+
+  def custom_method_on_serializer_two(object, options)
+    if options[:show_full]
+      object.full_data
+    else
+      object.data
+    end
   end
 end
 ```

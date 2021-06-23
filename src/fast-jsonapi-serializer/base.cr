@@ -104,7 +104,7 @@ module FastJSONAPISerializer
   #     options.nil? || !options[:test]?
   #   end
   #
-  #   def own_field
+  #   def own_field(_object, _options)
   #     12
   #   end
   #
@@ -333,6 +333,8 @@ module FastJSONAPISerializer
 
             # we call super on this method to build inherited attributes first
             # then build current serializer attributes thereafter
+            # whenever a serializer has its own attribute, we always pass method(object, options)
+            # giving access to those variables for business logic
             # :nodoc:
             protected def build_attributes(object, io, except, options)
               fields_count = {{ superclass.methods.any?(&.name.==(:build_attributes.id)) ? :super.id : 0 }}
@@ -341,7 +343,12 @@ module FastJSONAPISerializer
                 if !except.includes?(:{{name.id}}) {% if props[:if] %} && {{props[:if].id}}(object, options) {% end %}
                   io << "," unless fields_count.zero?
                   fields_count += 1
-                  io << "\"{{props[:key].id}}\":" << {{resource.id}}.{{name.id}}.to_json
+                  method = {% if resource == :self %}
+                    {{resource.id}}.{{name.id}}(object, options)
+                  {% else %}
+                    {{resource.id}}.{{name.id}}
+                  {% end %}
+                  io << "\"{{props[:key].id}}\":" << method.to_json
                 end
               {% end %}
               fields_count
