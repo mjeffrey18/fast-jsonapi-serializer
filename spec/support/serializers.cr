@@ -47,8 +47,12 @@ class RestaurantSerializer < FastJSONAPISerializer::Base(Restaurant)
     options.nil? || !options[:test]?
   end
 
-  def own_field
-    12
+  def own_field(object, options)
+    if options.nil?
+      12
+    else
+      "custom-#{object.name}"
+    end
   end
 end
 
@@ -83,8 +87,8 @@ class InheritedSerializer < RestaurantSerializer
 
   has_many :more_guests, GuestSerializer
 
-  def inherited_field
-    1.23
+  def inherited_field(object, options)
+    "#{object.class} 1.23"
   end
 end
 

@@ -90,7 +90,7 @@ describe FastJSONAPISerializer do
         },
       )
       data.should eq(
-        "{\"data\":{\"id\":\"1\",\"type\":\"restaurant\",\"attributes\":{\"name\":\"big burgers\",\"Rating\":\"Great!\",\"own_field\":12,\"inherited_field\":1.23},\"relationships\":{\"guests\":{\"data\":[{\"id\":\"123\",\"type\":\"guest\"},{\"id\":\"456\",\"type\":\"guest\"}]},\"more_guests\":{\"data\":[{\"id\":\"123\",\"type\":\"guest\"}]}}}" +
+        "{\"data\":{\"id\":\"1\",\"type\":\"restaurant\",\"attributes\":{\"name\":\"big burgers\",\"Rating\":\"Great!\",\"own_field\":12,\"inherited_field\":\"Restaurant 1.23\"},\"relationships\":{\"guests\":{\"data\":[{\"id\":\"123\",\"type\":\"guest\"},{\"id\":\"456\",\"type\":\"guest\"}]},\"more_guests\":{\"data\":[{\"id\":\"123\",\"type\":\"guest\"}]}}}" +
         ",\"included\":[{\"id\":\"123\",\"type\":\"guest\",\"attributes\":{\"age\":25,\"name\":\"Joe\"},\"relationships\":{}},{\"id\":\"456\",\"type\":\"guest\",\"attributes\":{\"age\":25,\"name\":\"Joe\"},\"relationships\":{}}]}"
       )
       validate_json_integrity(data)
@@ -106,7 +106,7 @@ describe FastJSONAPISerializer do
     it "accepts options args / attribute if: logic" do
       data = RestaurantSerializer.new(Restaurant.new).serialize(options: {:test => true})
       data.should_not contain(%("Rating"))
-      data.should eq("{\"data\":{\"id\":\"1\",\"type\":\"restaurant\",\"attributes\":{\"name\":\"big burgers\",\"own_field\":12}}}")
+      data.should eq("{\"data\":{\"id\":\"1\",\"type\":\"restaurant\",\"attributes\":{\"name\":\"big burgers\",\"own_field\":\"custom-big burgers\"}}}")
       validate_json_integrity(data)
     end
 
@@ -340,7 +340,7 @@ describe FastJSONAPISerializer do
           data.should contain(%("relationships"))
           data.should eq(
             "{\"data\":{\"id\":\"1\",\"type\":\"restaurant\"" +
-            ",\"attributes\":{\"own_field\":12}," +
+            ",\"attributes\":{\"own_field\":\"custom-big burgers\"}," +
             "\"relationships\":{\"address\":{\"data\":{\"id\":\"101\",\"type\":\"address\"}}" +
             ",\"post_code\":{\"data\":{\"id\":\"101\",\"type\":\"post_code\"}}" +
             ",\"rooms\":{\"data\":[{\"id\":\"1\",\"type\":\"room\"},{\"id\":\"2\",\"type\":\"room\"}]}" +
@@ -388,13 +388,13 @@ describe FastJSONAPISerializer do
           data.should contain(%("included"))
           data.should contain(%("relationships"))
           data.should eq(
-            "{\"data\":[{\"id\":\"1\",\"type\":\"restaurant\",\"attributes\":{\"own_field\":12}" +
+            "{\"data\":[{\"id\":\"1\",\"type\":\"restaurant\",\"attributes\":{\"own_field\":\"custom-big burgers\"}" +
             ",\"relationships\":{\"address\":{\"data\":{\"id\":\"101\",\"type\":\"address\"}}" +
             ",\"post_code\":{\"data\":{\"id\":\"101\",\"type\":\"post_code\"}}" +
             ",\"rooms\":{\"data\":[{\"id\":\"1\",\"type\":\"room\"},{\"id\":\"2\",\"type\":\"room\"}]}" +
             ",\"Tables\":{\"data\":[{\"id\":\"1\",\"type\":\"table\"},{\"id\":\"2\",\"type\":\"table\"},{\"id\":\"3\",\"type\":\"table\"}]}" +
             ",\"guests\":{\"data\":[{\"id\":\"1\",\"type\":\"guest\"},{\"id\":\"2\",\"type\":\"guest\"}]},\"diners\":{\"data\":[{\"id\":\"60\",\"type\":\"guest\"}]}" +
-            ",\"vips\":{\"data\":[{\"id\":\"1\",\"type\":\"guest\"}]}}},{\"id\":\"1\",\"type\":\"restaurant\",\"attributes\":{\"own_field\":12},\"relationships\":{\"address\":{\"data\":{\"id\":\"101\",\"type\":\"address\"}}" +
+            ",\"vips\":{\"data\":[{\"id\":\"1\",\"type\":\"guest\"}]}}},{\"id\":\"1\",\"type\":\"restaurant\",\"attributes\":{\"own_field\":\"custom-big burgers\"},\"relationships\":{\"address\":{\"data\":{\"id\":\"101\",\"type\":\"address\"}}" +
             ",\"post_code\":{\"data\":{\"id\":\"101\",\"type\":\"post_code\"}},\"rooms\":{\"data\":[{\"id\":\"1\",\"type\":\"room\"},{\"id\":\"2\",\"type\":\"room\"}]}" +
             ",\"Tables\":{\"data\":[{\"id\":\"1\",\"type\":\"table\"},{\"id\":\"2\",\"type\":\"table\"},{\"id\":\"3\",\"type\":\"table\"}]}" +
             ",\"guests\":{\"data\":[{\"id\":\"1\",\"type\":\"guest\"},{\"id\":\"2\",\"type\":\"guest\"}]},\"diners\":{\"data\":[{\"id\":\"60\",\"type\":\"guest\"}]}" +

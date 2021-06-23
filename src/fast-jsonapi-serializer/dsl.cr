@@ -9,7 +9,7 @@ module FastJSONAPISerializer
   #
   #   has_many :posts, PostSerializer
   #
-  #   def secure?(record, options)
+  #   def secure?(object, options)
   #     options && options[:secure]?
   #   end
   # end
@@ -82,7 +82,7 @@ module FastJSONAPISerializer
     #   attribute :age
     #
     #   # this method will be called instead of user.name
-    #   def name
+    #   def name(_object, _options)
     #     "Sally"
     #   end
     # end
@@ -105,7 +105,7 @@ module FastJSONAPISerializer
     #   attribute :first_name, "first-name"
     #   attribute :email, if: :secure?
     #
-    #   def secure?(record, options)
+    #   def secure?(object, options)
     #     options && options[:secure]?
     #   end
     # end
@@ -119,7 +119,7 @@ module FastJSONAPISerializer
     #   attribute :first_name, key: "first-name"
     #   attribute :email, if: :secure?
     #
-    #   def secure?(record, options)
+    #   def secure?(object, options)
     #     options && options[:secure]?
     #   end
     # end
