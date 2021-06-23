@@ -4,7 +4,7 @@
   <meta charset="utf-8" />
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="generator" content="Crystal Docs 0.36.1">
-<meta name="crystal_docs.project_version" content="0.1.0">
+<meta name="crystal_docs.project_version" content="0.2.0">
 <meta name="crystal_docs.project_name" content="fast-jsonapi-serializer">
 
 
@@ -13,7 +13,7 @@
 <script type="text/javascript" src="../js/doc.js"></script>
 
   <meta name="repository-name" content="fast-jsonapi-serializer">
-  <title>FastJSONAPISerializer::DSL - fast-jsonapi-serializer 0.1.0</title>
+  <title>FastJSONAPISerializer::DSL - fast-jsonapi-serializer 0.2.0</title>
   <script type="text/javascript">
     CrystalDocs.base_path = "../";
   </script>
@@ -39,7 +39,7 @@
       </h1>
 
       <span class="project-version">
-        0.1.0
+        0.2.0
       </span>
     </div>
   </div>
@@ -116,7 +116,7 @@
 
   has_many <span class="n">:posts</span>, <span class="t">PostSerializer</span>
 
-  <span class="k">def</span> <span class="m">secure?</span>(record, options)
+  <span class="k">def</span> <span class="m">secure?</span>(object, options)
     options && options[<span class="n">:secure</span>]?
   <span class="k">end</span>
 <span class="k">end</span></code></pre>
@@ -296,7 +296,7 @@
   attribute <span class="n">:age</span>
 
   <span class="c"># this method will be called instead of user.name</span>
-  <span class="k">def</span> <span class="m">name</span>
+  <span class="k">def</span> <span class="m">name</span>(_object, _options)
     <span class="s">&quot;Sally&quot;</span>
   <span class="k">end</span>
 <span class="k">end</span></code></pre>
@@ -316,7 +316,7 @@
   attribute <span class="n">:first_name</span>, <span class="s">&quot;first-name&quot;</span>
   attribute <span class="n">:email</span>, <span class="k">if</span>: <span class="n">:secure?</span>
 
-  <span class="k">def</span> <span class="m">secure?</span>(record, options)
+  <span class="k">def</span> <span class="m">secure?</span>(object, options)
     options && options[<span class="n">:secure</span>]?
   <span class="k">end</span>
 <span class="k">end</span></code></pre>
@@ -328,7 +328,7 @@
   attribute <span class="n">:first_name</span>, key: <span class="s">&quot;first-name&quot;</span>
   attribute <span class="n">:email</span>, <span class="k">if</span>: <span class="n">:secure?</span>
 
-  <span class="k">def</span> <span class="m">secure?</span>(record, options)
+  <span class="k">def</span> <span class="m">secure?</span>(object, options)
     options && options[<span class="n">:secure</span>]?
   <span class="k">end</span>
 <span class="k">end</span></code></pre>
