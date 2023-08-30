@@ -376,8 +376,8 @@ module FastJSONAPISerializer
 
             # Builds individual relations data with included Set updated with the serialized object
             # :nodoc:
-            protected def build_relation(io, name, props, sub_object, includes, options, included, included_keys)
-              serializer = props[:serializer].new(sub_object, included, included_keys)
+            protected def build_relation(io, name, props, sub_object, includes, options, relationships_container)
+              serializer = props[:serializer].new(sub_object, relationships_container)
               io << "{"
               io << "\"id\":"
               if sub_object.responds_to?(:id)
@@ -389,11 +389,11 @@ module FastJSONAPISerializer
               io << "\"type\":" << serializer.get_type.to_json
               io << "}"
 
-              if included_keys.add?(serializer.unique_key(sub_object))
+              if relationships_container.add?(serializer.unique_key(sub_object))
                 data = String.build do |included_io|
                   serializer._serialize_json(sub_object, included_io, [] of Symbol, nested_includes(name, includes), options)
                 end
-                included.add(data)
+                relationships_container.include_content(data)
               end
             end
 
@@ -402,7 +402,7 @@ module FastJSONAPISerializer
             # Then we build the current serializer relationships thereafter
             # The logic runs through all the relationships defined via the DSL and builds the json if the `serializer(includes: ...)` args have been passed.
             # :nodoc:
-            protected def build_relationships(object, io, includes, options, included, included_keys)
+            protected def build_relationships(object, io, includes, options, relationships_container)
               fields_count = {{ superclass.methods.any?(&.name.==(:build_relationships.id)) ? :super.id : 0 }}
 
               {% for name, props in RELATIONS %}
@@ -419,7 +419,7 @@ module FastJSONAPISerializer
                       object.{{name.id}}.each_with_index do |sub_object, index|
                         io << "," unless has_many_fields_count.zero?
                         has_many_fields_count += 1
-                        build_relation(io, {{name}}, {{props}}, sub_object, includes, options, included, included_keys)
+                        build_relation(io, {{name}}, {{props}}, sub_object, includes, options, relationships_container)
                       end
                     end
                     io << "]"
@@ -428,7 +428,7 @@ module FastJSONAPISerializer
                   {% elsif props[:type] == :has_one || props[:type] == :belongs_to %}
                     sub_object = object.{{name.id}}
                     if sub_object
-                      build_relation(io, {{name}}, {{props}}, sub_object, includes, options, included, included_keys)
+                      build_relation(io, {{name}}, {{props}}, sub_object, includes, options, relationships_container)
                     else
                       io << "null"
                     end
@@ -450,7 +450,7 @@ module FastJSONAPISerializer
               return if includes.empty?
 
               io << ",\"relationships\":{"
-              build_relationships(object, io, includes, options, @_included, @_included_keys)
+              build_relationships(object, io, includes, options, @_relationships_container)
               io << "}"
               return
             end
@@ -488,10 +488,23 @@ module FastJSONAPISerializer
 
     # Resource to be serialized.
     protected getter resource
-    # Contains unique set of all included serialized relationships
-    private getter _included : Set(String)
-    # Contains unique set of all serializer keys to ensure we do not add the same included twice
-    private getter _included_keys : Set(Tuple(String, IDAny))
+
+    private getter _relationships_container = RelationshipsContainer.new
+
+    class RelationshipsContainer
+      property content = Set(String).new
+      property included_keys = Set(Tuple(String, IDAny)).new
+
+      delegate :empty?, to: included_keys
+
+      def add?(item : Tuple(String, IDAny))
+        included_keys.add?(item)
+      end
+
+      def include_content(item : String)
+        content.add(item)
+      end
+    end
 
     # Only use @resource
     #
@@ -500,7 +513,7 @@ module FastJSONAPISerializer
     # ```
     #
     # @_included and @_included_keys are used internally to build child serializers via associations
-    def initialize(@resource : T | Array(T)?, @_included = Set(String).new, @_included_keys = Set(Tuple(String, IDAny)).new)
+    def initialize(@resource : T | Array(T)?, @_relationships_container = RelationshipsContainer.new)
     end
 
     # Generates a JSON formatted string.
@@ -577,9 +590,9 @@ module FastJSONAPISerializer
         end
       end
       fields_count = 0
-      unless @_included.empty?
+      unless @_relationships_container.empty?
         io << %(,"included":[)
-        @_included.each_with_index do |json, index|
+        @_relationships_container.content.each_with_index do |json, index|
           io << "," unless fields_count.zero?
           fields_count += 1
           io << json
