@@ -151,6 +151,21 @@ describe FastJSONAPISerializer do
           validate_json_integrity(data)
         end
 
+        it "adds relations objects and skips included data" do
+          resource = Restaurant.new
+          resource.address = Address.new
+          rel_config = FastJSONAPISerializer::RelationshipConfig.parse({ :address => [:address] })
+          rel_config.embed(false)
+          data = RestaurantSerializer.new(resource).serialize(includes: rel_config)
+          data.should contain(%("included"))
+          data.should contain(%("relationships"))
+
+          data.should eq(
+            "{\"data\":{\"id\":\"1\",\"type\":\"restaurant\",\"attributes\":{\"name\":\"big burgers\",\"Rating\":\"Great!\",\"own_field\":12},\"relationships\":{\"address\":{\"data\":{\"id\":\"101\",\"type\":\"address\"}}}},\"included\":[]}"
+          )
+          validate_json_integrity(data)
+        end
+
         it "only includes objects to included data if relationship exists" do
           data = RestaurantSerializer.new(Restaurant.new).serialize(
             includes: {
