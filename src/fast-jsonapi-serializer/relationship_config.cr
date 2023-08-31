@@ -27,6 +27,10 @@ module FastJSONAPISerializer
       children.nil? || children.try &.empty?
     end
 
+    def traverse(path)
+      children.not_nil!.find { |child| child.name == path }.not_nil!
+    end
+
     def self.parse(config : Iterable)
       new(nil, build(config))
     end

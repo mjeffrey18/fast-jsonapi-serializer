@@ -348,7 +348,7 @@ describe FastJSONAPISerializer do
               :vips   => [:vips],
             }
           )
-          ref_config.children.not_nil!.find { |node| node.name == :guests }.not_nil!.embed(false)
+          ref_config.traverse(:guests).embed(false)
           data = RestaurantSerializer.new(resource).serialize(includes: ref_config)
 
           data.should contain(%("included"))
