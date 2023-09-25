@@ -1,5 +1,15 @@
 module FastJSONAPISerializer
   class RelationshipConfig
+    class RelationshipMissingException < Exception
+      def initialize(relation : Symbol?)
+        @message = if relation
+          "'#{relation}' association missing."
+        else
+          "Associations are not configured."
+        end
+      end
+    end
+
     getter name : Symbol?
     getter children : Array(RelationshipConfig)?
     getter included = true
@@ -28,7 +38,11 @@ module FastJSONAPISerializer
     end
 
     def relationship(path)
-      children.not_nil!.find { |child| child.name == path }.not_nil!
+      raise RelationshipMissingException.new(nil) if children.nil?
+
+      rel = children.not_nil!.find { |child| child.name == path }
+      raise RelationshipMissingException.new(path) if rel.nil?
+      rel
     end
 
     def self.parse(config : Iterable)
