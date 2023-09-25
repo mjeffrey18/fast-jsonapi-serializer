@@ -391,7 +391,7 @@ module FastJSONAPISerializer
               io << "\"type\":" << serializer.get_type.to_json
               io << "}"
 
-              if relationships_container.add?(serializer.unique_key(sub_object)) && includes.embed
+              if relationships_container.add?(serializer.unique_key(sub_object)) && includes.included
                 data = String.build do |included_io|
                   serializer._serialize_json(sub_object, included_io, [] of Symbol, includes.nested(name), options)
                 end
@@ -408,7 +408,7 @@ module FastJSONAPISerializer
               fields_count = {{ superclass.methods.any?(&.name.==(:build_relationships.id)) ? :super.id : 0 }}
 
               {% for name, props in RELATIONS %}
-                if includes.have_relation?({{name}})
+                if includes.has_relation?({{name}})
                   io << "," unless fields_count.zero?
                   io << "\"{{props[:key].id}}\":{"
                   io << "\"data\":"

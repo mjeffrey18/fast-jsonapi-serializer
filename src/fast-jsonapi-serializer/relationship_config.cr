@@ -2,18 +2,18 @@ module FastJSONAPISerializer
   class RelationshipConfig
     getter name : Symbol?
     getter children : Array(RelationshipConfig)?
-    getter embed = true
+    getter included = true
 
     def initialize(@name = nil, @children = nil)
     end
 
-    def embed(@embed)
-      children.try &.each { |child| child.embed(@embed) }
+    def include?(@included)
+      children.try &.each { |child| child.include?(@included) }
 
       self
     end
 
-    def have_relation?(name : Symbol)
+    def has_relation?(name : Symbol)
       children.try &.any? { |rel| rel.name == name }
     end
 
@@ -27,7 +27,7 @@ module FastJSONAPISerializer
       children.nil? || children.try &.empty?
     end
 
-    def traverse(path)
+    def relationship(path)
       children.not_nil!.find { |child| child.name == path }.not_nil!
     end
 
