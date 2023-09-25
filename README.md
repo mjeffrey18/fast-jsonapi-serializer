@@ -551,7 +551,7 @@ Example above produces this output (made readable for docs):
 }
 ```
 
-By default usage of `serialize(includes: ...)` resializes relationships and includes related objects in `includes: ...` array. You able to serialize relationships only by using `FastJSONAPISerializer::RelationshipConfig`, example:
+By default usage of `serialize(includes: ...)` serializes relationships and includes related objects in `includes: ...` array. But you able to serialize relationships only by using `FastJSONAPISerializer::RelationshipConfig`, example:
 
 ```crystal
 serialization_config = FastJSONAPISerializer::RelationshipConfig.parse(
@@ -566,7 +566,7 @@ RestaurantSerializer.new(resource).serialize(includes: serialization_config)
 
 ```
 
-The code above produce:
+The code above produces:
 
 ```json
 {
