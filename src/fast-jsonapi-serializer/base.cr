@@ -391,7 +391,7 @@ module FastJSONAPISerializer
               io << "\"type\":" << serializer.get_type.to_json
               io << "}"
 
-              if relationships_container.add?(serializer.unique_key(sub_object)) && includes.included
+              if includes.relationship(name).included && relationships_container.add?(serializer.unique_key(sub_object))
                 data = String.build do |included_io|
                   serializer._serialize_json(sub_object, included_io, [] of Symbol, includes.nested(name), options)
                 end

@@ -157,11 +157,11 @@ describe FastJSONAPISerializer do
           rel_config = FastJSONAPISerializer::RelationshipConfig.parse({ :address => [:address] })
           rel_config.include?(false)
           data = RestaurantSerializer.new(resource).serialize(includes: rel_config)
-          data.should contain(%("included"))
+
           data.should contain(%("relationships"))
 
           data.should eq(
-            "{\"data\":{\"id\":\"1\",\"type\":\"restaurant\",\"attributes\":{\"name\":\"big burgers\",\"Rating\":\"Great!\",\"own_field\":12},\"relationships\":{\"address\":{\"data\":{\"id\":\"101\",\"type\":\"address\"}}}},\"included\":[]}"
+            "{\"data\":{\"id\":\"1\",\"type\":\"restaurant\",\"attributes\":{\"name\":\"big burgers\",\"Rating\":\"Great!\",\"own_field\":12},\"relationships\":{\"address\":{\"data\":{\"id\":\"101\",\"type\":\"address\"}}}}}"
           )
           validate_json_integrity(data)
         end
@@ -217,10 +217,10 @@ describe FastJSONAPISerializer do
           resource = Restaurant.new
           resource.post_code = PostCode.new
           data = RestaurantSerializer.new(resource).serialize(includes: rel_config)
-          data.should contain(%("included"))
+
           data.should contain(%("relationships"))
           data.should eq(
-            "{\"data\":{\"id\":\"1\",\"type\":\"restaurant\",\"attributes\":{\"name\":\"big burgers\",\"Rating\":\"Great!\",\"own_field\":12},\"relationships\":{\"post_code\":{\"data\":{\"id\":\"101\",\"type\":\"post_code\"}}}},\"included\":[]}"
+            "{\"data\":{\"id\":\"1\",\"type\":\"restaurant\",\"attributes\":{\"name\":\"big burgers\",\"Rating\":\"Great!\",\"own_field\":12},\"relationships\":{\"post_code\":{\"data\":{\"id\":\"101\",\"type\":\"post_code\"}}}}}"
           )
           validate_json_integrity(data)
         end
@@ -277,11 +277,10 @@ describe FastJSONAPISerializer do
           resource.rooms = [Room.new(1), Room.new(2)]
           ref_config = FastJSONAPISerializer::RelationshipConfig.parse({ :rooms => [:rooms] }).include?(false)
           data = RestaurantSerializer.new(resource).serialize(includes: ref_config)
-          data.should contain(%("included"))
+
           data.should contain(%("relationships"))
           data.should eq(
-            "{\"data\":{\"id\":\"1\",\"type\":\"restaurant\",\"attributes\":{\"name\":\"big burgers\",\"Rating\":\"Great!\",\"own_field\":12},\"relationships\":{\"rooms\":{\"data\":[{\"id\":\"1\",\"type\":\"room\"},{\"id\":\"2\",\"type\":\"room\"}]}}}" +
-            ",\"included\":[]}"
+            "{\"data\":{\"id\":\"1\",\"type\":\"restaurant\",\"attributes\":{\"name\":\"big burgers\",\"Rating\":\"Great!\",\"own_field\":12},\"relationships\":{\"rooms\":{\"data\":[{\"id\":\"1\",\"type\":\"room\"},{\"id\":\"2\",\"type\":\"room\"}]}}}}"
           )
           validate_json_integrity(data)
         end
@@ -365,8 +364,8 @@ describe FastJSONAPISerializer do
             "\"diners\":{\"data\":[{\"id\":\"60\",\"type\":\"guest\"}]}," +
             "\"vips\":{\"data\":[{\"id\":\"1\",\"type\":\"guest\"}]}}}" +
             ",\"included\":[" +
-            "{\"id\":\"1\",\"type\":\"guest\",\"attributes\":{\"age\":25,\"name\":\"Joe\"},\"relationships\":{\"friends\":{\"data\":[{\"id\":\"1\",\"type\":\"guest\"},{\"id\":\"2\",\"type\":\"guest\"},{\"id\":\"3\",\"type\":\"guest\"}]}}}," +
-            "{\"id\":\"60\",\"type\":\"guest\",\"attributes\":{\"age\":25,\"name\":\"Joe\"},\"relationships\":{}}]}"
+            "{\"id\":\"60\",\"type\":\"guest\",\"attributes\":{\"age\":25,\"name\":\"Joe\"},\"relationships\":{}}," +
+            "{\"id\":\"1\",\"type\":\"guest\",\"attributes\":{\"age\":25,\"name\":\"Joe\"}}]}"
           )
           validate_json_integrity(data)
         end
