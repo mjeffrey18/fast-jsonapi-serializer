@@ -3,10 +3,10 @@ module FastJSONAPISerializer
     class RelationshipMissingException < Exception
       def initialize(relation : Symbol?)
         @message = if relation
-          "'#{relation}' association missing."
-        else
-          "Associations are not configured."
-        end
+                     "'#{relation}' association missing."
+                   else
+                     "Associations are not configured."
+                   end
       end
     end
 
@@ -28,7 +28,7 @@ module FastJSONAPISerializer
     end
 
     def nested(name : Symbol)
-      null_rel = self.class.new()
+      null_rel = self.class.new
 
       children.try &.find(null_rel) { |rel| rel.name == name } || null_rel
     end

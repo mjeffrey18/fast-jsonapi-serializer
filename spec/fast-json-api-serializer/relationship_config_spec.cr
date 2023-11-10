@@ -3,7 +3,7 @@ require "../spec_helper"
 describe FastJSONAPISerializer::RelationshipConfig do
   context "when config contains hashes" do
     it "parses configuration" do
-      configuration = { :a => { :b => :c } }
+      configuration = {:a => {:b => :c}}
       config = FastJSONAPISerializer::RelationshipConfig.parse(configuration)
       config.included.should be_true
       config.empty?.should be_false
@@ -37,7 +37,7 @@ describe FastJSONAPISerializer::RelationshipConfig do
 
   context "when config contains array" do
     it "parses configuration" do
-      configuration = { :a => { :b => [:c] } }
+      configuration = {:a => {:b => [:c]}}
       config = FastJSONAPISerializer::RelationshipConfig.parse(configuration)
       config.included.should be_true
       config.empty?.should be_false

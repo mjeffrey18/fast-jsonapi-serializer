@@ -154,7 +154,7 @@ describe FastJSONAPISerializer do
         it "adds relations objects and skips included data" do
           resource = Restaurant.new
           resource.address = Address.new
-          rel_config = FastJSONAPISerializer::RelationshipConfig.parse({ :address => [:address] })
+          rel_config = FastJSONAPISerializer::RelationshipConfig.parse({:address => [:address]})
           rel_config.include?(false)
           data = RestaurantSerializer.new(resource).serialize(includes: rel_config)
 
@@ -213,7 +213,7 @@ describe FastJSONAPISerializer do
         end
 
         it "includes only relationsips objects and skips embedding data" do
-          rel_config = FastJSONAPISerializer::RelationshipConfig.parse({ :post_code => [:post_code] }).include?(false)
+          rel_config = FastJSONAPISerializer::RelationshipConfig.parse({:post_code => [:post_code]}).include?(false)
           resource = Restaurant.new
           resource.post_code = PostCode.new
           data = RestaurantSerializer.new(resource).serialize(includes: rel_config)
@@ -275,7 +275,7 @@ describe FastJSONAPISerializer do
         it "adds relation objects and skips included data" do
           resource = Restaurant.new
           resource.rooms = [Room.new(1), Room.new(2)]
-          ref_config = FastJSONAPISerializer::RelationshipConfig.parse({ :rooms => [:rooms] }).include?(false)
+          ref_config = FastJSONAPISerializer::RelationshipConfig.parse({:rooms => [:rooms]}).include?(false)
           data = RestaurantSerializer.new(resource).serialize(includes: ref_config)
 
           data.should contain(%("relationships"))
@@ -342,10 +342,10 @@ describe FastJSONAPISerializer do
           resource.guests = [Guest.new(1), Guest.new(2)]
 
           ref_config = FastJSONAPISerializer::RelationshipConfig.parse({
-              :guests => {:friends => [:friends]},
-              :diners => [:diners],
-              :vips   => [:vips],
-            }
+            :guests => {:friends => [:friends]},
+            :diners => [:diners],
+            :vips   => [:vips],
+          }
           )
           ref_config.relationship(:guests).include?(false)
           data = RestaurantSerializer.new(resource).serialize(includes: ref_config)
