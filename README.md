@@ -551,6 +551,81 @@ Example above produces this output (made readable for docs):
 }
 ```
 
+By default usage of `serialize(includes: ...)` serializes relationships and includes related objects in `includes: ...` array. But you able to serialize relationships only by using `FastJSONAPISerializer::RelationshipConfig`, example:
+
+```crystal
+serialization_config = FastJSONAPISerializer::RelationshipConfig.parse(
+  {
+    :address   => [:address],
+    :post_code => [:post_code],
+    :tables    => {:room => [:room]}, # notice nested associations also
+  }
+)
+serialization_config.relationship(:tables).include?(false)
+RestaurantSerializer.new(resource).serialize(includes: serialization_config)
+
+```
+
+The code above produces:
+
+```json
+{
+  "data": {
+    "id": "1",
+    "type": "restaurant",
+    "attributes": {
+      "name": "big burgers"
+    },
+    "relationships": {
+      "address": {
+        "data": {
+          "id": "101",
+          "type": "address"
+        }
+      },
+      "post_code": {
+        "data": {
+          "id": "101",
+          "type": "post_code"
+        }
+      },
+      "Tables": {
+        "data": [
+          {
+            "id": "1",
+            "type": "table"
+          },
+          {
+            "id": "2",
+            "type": "table"
+          },
+          {
+            "id": "3",
+            "type": "table"
+          }
+        ]
+      }
+    }
+  },
+  "included": [
+    {
+      "id": "101",
+      "type": "address",
+      "attributes": {
+        "street": "some street"
+      }
+    },
+    {
+      "id": "101",
+      "type": "post_code",
+      "attributes": {
+        "code": "code 24"
+      }
+    }
+  ]
+}
+```
+
 ### Meta
 
 You can add meta details to the JSON response payload.

@@ -1,4 +1,5 @@
 require "spec"
+require "../src/fast-jsonapi-serializer/relationship_config"
 require "../src/fast-jsonapi-serializer"
 require "./support/**"
 

@@ -1,4 +1,6 @@
 require "./dsl"
+require "./relationship_config"
+require "./relationships_container"
 
 module FastJSONAPISerializer
   # Allowed types for *meta* hash values.
@@ -376,8 +378,8 @@ module FastJSONAPISerializer
 
             # Builds individual relations data with included Set updated with the serialized object
             # :nodoc:
-            protected def build_relation(io, name, props, sub_object, includes, options, included, included_keys)
-              serializer = props[:serializer].new(sub_object, included, included_keys)
+            protected def build_relation(io, name, props, sub_object, includes, options, relationships_container)
+              serializer = props[:serializer].new(sub_object, relationships_container)
               io << "{"
               io << "\"id\":"
               if sub_object.responds_to?(:id)
@@ -389,11 +391,11 @@ module FastJSONAPISerializer
               io << "\"type\":" << serializer.get_type.to_json
               io << "}"
 
-              if included_keys.add?(serializer.unique_key(sub_object))
+              if includes.relationship(name).included && relationships_container.add?(serializer.unique_key(sub_object))
                 data = String.build do |included_io|
-                  serializer._serialize_json(sub_object, included_io, [] of Symbol, nested_includes(name, includes), options)
+                  serializer._serialize_json(sub_object, included_io, [] of Symbol, includes.nested(name), options)
                 end
-                included.add(data)
+                relationships_container.include_content(data)
               end
             end
 
@@ -402,11 +404,11 @@ module FastJSONAPISerializer
             # Then we build the current serializer relationships thereafter
             # The logic runs through all the relationships defined via the DSL and builds the json if the `serializer(includes: ...)` args have been passed.
             # :nodoc:
-            protected def build_relationships(object, io, includes, options, included, included_keys)
+            protected def build_relationships(object, io, includes, options, relationships_container)
               fields_count = {{ superclass.methods.any?(&.name.==(:build_relationships.id)) ? :super.id : 0 }}
 
               {% for name, props in RELATIONS %}
-                if has_relation?({{name}}, includes)
+                if includes.has_relation?({{name}})
                   io << "," unless fields_count.zero?
                   io << "\"{{props[:key].id}}\":{"
                   io << "\"data\":"
@@ -419,7 +421,7 @@ module FastJSONAPISerializer
                       object.{{name.id}}.each_with_index do |sub_object, index|
                         io << "," unless has_many_fields_count.zero?
                         has_many_fields_count += 1
-                        build_relation(io, {{name}}, {{props}}, sub_object, includes, options, included, included_keys)
+                        build_relation(io, {{name}}, {{props}}, sub_object, includes, options, relationships_container)
                       end
                     end
                     io << "]"
@@ -428,7 +430,7 @@ module FastJSONAPISerializer
                   {% elsif props[:type] == :has_one || props[:type] == :belongs_to %}
                     sub_object = object.{{name.id}}
                     if sub_object
-                      build_relation(io, {{name}}, {{props}}, sub_object, includes, options, included, included_keys)
+                      build_relation(io, {{name}}, {{props}}, sub_object, includes, options, relationships_container)
                     else
                       io << "null"
                     end
@@ -450,7 +452,7 @@ module FastJSONAPISerializer
               return if includes.empty?
 
               io << ",\"relationships\":{"
-              build_relationships(object, io, includes, options, @_included, @_included_keys)
+              build_relationships(object, io, includes, options, @_relationships_container)
               io << "}"
               return
             end
@@ -488,10 +490,8 @@ module FastJSONAPISerializer
 
     # Resource to be serialized.
     protected getter resource
-    # Contains unique set of all included serialized relationships
-    private getter _included : Set(String)
-    # Contains unique set of all serializer keys to ensure we do not add the same included twice
-    private getter _included_keys : Set(Tuple(String, IDAny))
+
+    private getter _relationships_container = RelationshipsContainer.new
 
     # Only use @resource
     #
@@ -500,7 +500,7 @@ module FastJSONAPISerializer
     # ```
     #
     # @_included and @_included_keys are used internally to build child serializers via associations
-    def initialize(@resource : T | Array(T)?, @_included = Set(String).new, @_included_keys = Set(Tuple(String, IDAny)).new)
+    def initialize(@resource : T | Array(T)?, @_relationships_container = RelationshipsContainer.new)
     end
 
     # Generates a JSON formatted string.
@@ -536,9 +536,13 @@ module FastJSONAPISerializer
     # You can also specify deeper and more sophisticated schema by passing `Hash`. In this case hash values should be of
     # `Array(Symbol) | Hash | Nil` type. `nil` is used to mark association which name is used for key as a leaf in schema
     # tree.
-    def serialize(except : Array(Symbol) = %i(), includes : Array(Symbol) | Hash = %i(), options : Hash? = nil, meta : Hash(Symbol, MetaAny)? = nil)
+    def serialize(except : Array(Symbol) = %i(),
+                  includes : RelationshipConfig | Array(Symbol) | Hash = %i(),
+                  options : Hash? = nil,
+                  meta : Hash(Symbol, MetaAny)? = nil)
+      parsed_includes = includes.is_a?(RelationshipConfig) ? includes : RelationshipConfig.parse(includes)
       String.build do |io|
-        build(io, except, includes, options, meta)
+        build(io, except, parsed_includes, options, meta)
       end
     end
 
@@ -567,7 +571,7 @@ module FastJSONAPISerializer
     end
 
     # :nodoc:
-    protected def build(io : IO, except : Array, includes : Array | Hash, options : Hash?, meta)
+    protected def build(io : IO, except : Array, includes : RelationshipConfig, options : Hash?, meta)
       io << "{\"data\":"
       _serialize_json(resource, io, except, includes, options)
       default_meta = self.class.meta(options)
@@ -577,9 +581,9 @@ module FastJSONAPISerializer
         end
       end
       fields_count = 0
-      unless @_included.empty?
+      unless @_relationships_container.empty?
         io << %(,"included":[)
-        @_included.each_with_index do |json, index|
+        @_relationships_container.content.each_with_index do |json, index|
           io << "," unless fields_count.zero?
           fields_count += 1
           io << json
@@ -598,30 +602,8 @@ module FastJSONAPISerializer
     protected def serialize_relations(object, io, includes, options)
     end
 
-    # Returns whether *includes* has a mention for relation *name*.
     # :nodoc:
-    protected def has_relation?(name, includes : Array)
-      includes.includes?(name)
-    end
-
-    # :nodoc:
-    protected def has_relation?(name, includes : Hash)
-      includes.has_key?(name)
-    end
-
-    # Returns nested inclusions for relation *name*.
-    # :nodoc:
-    protected def nested_includes(name, includes : Array)
-      %i()
-    end
-
-    # :nodoc:
-    protected def nested_includes(name, includes : Hash)
-      includes[name] || %i()
-    end
-
-    # :nodoc:
-    protected def _serialize_json(object : T, io : IO, except : Array, includes : Array | Hash, options : Hash?)
+    protected def _serialize_json(object : T, io : IO, except : Array, includes : RelationshipConfig, options : Hash?)
       io << "{"
       serialize_attributes(object, io, except, options)
       serialize_relations(object, io, includes, options)
@@ -629,7 +611,11 @@ module FastJSONAPISerializer
     end
 
     # :nodoc:
-    protected def _serialize_json(collection : Array(T), io : IO, except : Array, includes : Array | Hash, options : Hash?)
+    protected def _serialize_json(collection : Array(T),
+                                  io : IO,
+                                  except : Array,
+                                  includes : RelationshipConfig,
+                                  options : Hash?)
       io << "["
       collection.each_with_index do |object, index|
         io << "," if index != 0
@@ -639,7 +625,11 @@ module FastJSONAPISerializer
     end
 
     # :nodoc:
-    protected def _serialize_json(object : Nil, io : IO, except : Array, includes : Array | Hash, options : Hash?)
+    protected def _serialize_json(object : Nil,
+                                  io : IO,
+                                  except : Array,
+                                  includes : RelationshipConfig,
+                                  options : Hash?)
       io << "null"
     end
 

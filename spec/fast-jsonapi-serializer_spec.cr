@@ -151,6 +151,21 @@ describe FastJSONAPISerializer do
           validate_json_integrity(data)
         end
 
+        it "adds relations objects and skips included data" do
+          resource = Restaurant.new
+          resource.address = Address.new
+          rel_config = FastJSONAPISerializer::RelationshipConfig.parse({:address => [:address]})
+          rel_config.include?(false)
+          data = RestaurantSerializer.new(resource).serialize(includes: rel_config)
+
+          data.should contain(%("relationships"))
+
+          data.should eq(
+            "{\"data\":{\"id\":\"1\",\"type\":\"restaurant\",\"attributes\":{\"name\":\"big burgers\",\"Rating\":\"Great!\",\"own_field\":12},\"relationships\":{\"address\":{\"data\":{\"id\":\"101\",\"type\":\"address\"}}}}}"
+          )
+          validate_json_integrity(data)
+        end
+
         it "only includes objects to included data if relationship exists" do
           data = RestaurantSerializer.new(Restaurant.new).serialize(
             includes: {
@@ -193,6 +208,19 @@ describe FastJSONAPISerializer do
           data.should contain(%("relationships"))
           data.should eq(
             "{\"data\":{\"id\":\"1\",\"type\":\"restaurant\",\"attributes\":{\"name\":\"big burgers\",\"Rating\":\"Great!\",\"own_field\":12},\"relationships\":{\"post_code\":{\"data\":{\"id\":\"101\",\"type\":\"post_code\"}}}},\"included\":[{\"id\":\"101\",\"type\":\"post_code\",\"attributes\":{\"code\":\"code 24\"}}]}"
+          )
+          validate_json_integrity(data)
+        end
+
+        it "includes only relationsips objects and skips embedding data" do
+          rel_config = FastJSONAPISerializer::RelationshipConfig.parse({:post_code => [:post_code]}).include?(false)
+          resource = Restaurant.new
+          resource.post_code = PostCode.new
+          data = RestaurantSerializer.new(resource).serialize(includes: rel_config)
+
+          data.should contain(%("relationships"))
+          data.should eq(
+            "{\"data\":{\"id\":\"1\",\"type\":\"restaurant\",\"attributes\":{\"name\":\"big burgers\",\"Rating\":\"Great!\",\"own_field\":12},\"relationships\":{\"post_code\":{\"data\":{\"id\":\"101\",\"type\":\"post_code\"}}}}}"
           )
           validate_json_integrity(data)
         end
@@ -240,6 +268,19 @@ describe FastJSONAPISerializer do
           data.should eq(
             "{\"data\":{\"id\":\"1\",\"type\":\"restaurant\",\"attributes\":{\"name\":\"big burgers\",\"Rating\":\"Great!\",\"own_field\":12},\"relationships\":{\"rooms\":{\"data\":[{\"id\":\"1\",\"type\":\"room\"},{\"id\":\"2\",\"type\":\"room\"}]}}}" +
             ",\"included\":[{\"id\":\"1\",\"type\":\"room\",\"attributes\":{\"name\":\"1-name\"},\"relationships\":{}},{\"id\":\"2\",\"type\":\"room\",\"attributes\":{\"name\":\"2-name\"},\"relationships\":{}}]}"
+          )
+          validate_json_integrity(data)
+        end
+
+        it "adds relation objects and skips included data" do
+          resource = Restaurant.new
+          resource.rooms = [Room.new(1), Room.new(2)]
+          ref_config = FastJSONAPISerializer::RelationshipConfig.parse({:rooms => [:rooms]}).include?(false)
+          data = RestaurantSerializer.new(resource).serialize(includes: ref_config)
+
+          data.should contain(%("relationships"))
+          data.should eq(
+            "{\"data\":{\"id\":\"1\",\"type\":\"restaurant\",\"attributes\":{\"name\":\"big burgers\",\"Rating\":\"Great!\",\"own_field\":12},\"relationships\":{\"rooms\":{\"data\":[{\"id\":\"1\",\"type\":\"room\"},{\"id\":\"2\",\"type\":\"room\"}]}}}}"
           )
           validate_json_integrity(data)
         end
@@ -292,6 +333,39 @@ describe FastJSONAPISerializer do
             "{\"id\":\"2\",\"type\":\"guest\",\"attributes\":{\"age\":25,\"name\":\"Joe\"},\"relationships\":{\"friends\":{\"data\":[{\"id\":\"1\",\"type\":\"guest\"},{\"id\":\"2\",\"type\":\"guest\"},{\"id\":\"3\",\"type\":\"guest\"}]}}}," +
             "{\"id\":\"1\",\"type\":\"guest\",\"attributes\":{\"age\":25,\"name\":\"Joe\"},\"relationships\":{\"friends\":{\"data\":[{\"id\":\"1\",\"type\":\"guest\"},{\"id\":\"2\",\"type\":\"guest\"},{\"id\":\"3\",\"type\":\"guest\"}]}}}," +
             "{\"id\":\"60\",\"type\":\"guest\",\"attributes\":{\"age\":25,\"name\":\"Joe\"},\"relationships\":{}}]}"
+          )
+          validate_json_integrity(data)
+        end
+
+        it "can skip some configured nodes from including data" do
+          resource = Restaurant.new
+          resource.guests = [Guest.new(1), Guest.new(2)]
+
+          ref_config = FastJSONAPISerializer::RelationshipConfig.parse({
+            :guests => {:friends => [:friends]},
+            :diners => [:diners],
+            :vips   => [:vips],
+          }
+          )
+          ref_config.relationship(:guests).include?(false)
+          data = RestaurantSerializer.new(resource).serialize(includes: ref_config)
+
+          data.should contain(%("included"))
+          data.should contain(%("relationships"))
+          # restaurant has_many :guests
+          # -- > guest has_many :friends -> which happens to other guests
+          # so we include all restaurant guests and the guests.friends(Guests)
+          # which uniquely returns a list of 4 guests in the included
+          data.should eq(
+            "{\"data\":{\"id\":\"1\",\"type\":\"restaurant\",\"attributes\":{\"name\":\"big burgers\",\"Rating\":\"Great!\",\"own_field\":12}" +
+            ",\"relationships\":{\"guests\":{\"data\":[" +
+            "{\"id\":\"1\",\"type\":\"guest\"}," +
+            "{\"id\":\"2\",\"type\":\"guest\"}]}," +
+            "\"diners\":{\"data\":[{\"id\":\"60\",\"type\":\"guest\"}]}," +
+            "\"vips\":{\"data\":[{\"id\":\"1\",\"type\":\"guest\"}]}}}" +
+            ",\"included\":[" +
+            "{\"id\":\"60\",\"type\":\"guest\",\"attributes\":{\"age\":25,\"name\":\"Joe\"},\"relationships\":{}}," +
+            "{\"id\":\"1\",\"type\":\"guest\",\"attributes\":{\"age\":25,\"name\":\"Joe\"}}]}"
           )
           validate_json_integrity(data)
         end
